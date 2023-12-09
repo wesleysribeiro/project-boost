@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerBehavior : MonoBehaviour
 {
+    public float speed = 5.0f;
     // Start is called before the first frame update
     void Start()
     {
@@ -16,6 +17,7 @@ public class PlayerBehavior : MonoBehaviour
         if (Input.GetKey(KeyCode.Space))
         {
             Debug.Log("Space key was pressed.");
+            transform.Translate(0, speed * Time.deltaTime, 0);
         }
     }
 }
