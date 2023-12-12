@@ -14,8 +14,6 @@ public class PlayerBehavior : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        // transform.Rotate(-Vector3.forward * 45);
-        // Debug.Log(transform.up);
     }
 
     // Update is called once per frame
@@ -48,6 +46,6 @@ public class PlayerBehavior : MonoBehaviour
         }
 
         float rotation = Input.GetAxis("Horizontal");
-        transform.Rotate(0, 0, -rotationSpeed * rotation * Time.deltaTime);
+        transform.Rotate(-rotationSpeed * rotation * Time.deltaTime * Vector3.forward);
     }
 }
