@@ -13,6 +13,8 @@ public class PlayerBehavior : MonoBehaviour
     AudioSource losingSrc;
     AudioSource winningSrc;
 
+    ParticleSystem rocketFire;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -20,6 +22,7 @@ public class PlayerBehavior : MonoBehaviour
         boostSrc = GetComponentInChildren<AudioSource>();
         losingSrc = GameObject.FindWithTag("LosingAudio").GetComponent<AudioSource>();
         winningSrc = GameObject.FindWithTag("WinningAudio").GetComponent<AudioSource>();
+        rocketFire = GetComponentInChildren<ParticleSystem>();
     }
 
     // Update is called once per frame
@@ -50,7 +53,12 @@ public class PlayerBehavior : MonoBehaviour
     {   
         if(Input.GetKeyDown(KeyCode.Space))
         {
+            rocketFire.Play();
             boostSrc.PlayDelayed(0.2f);
+        }
+        if(Input.GetKeyUp(KeyCode.Space))
+        {
+            rocketFire.Stop();
         }
 
         if (Input.GetKey(KeyCode.Space))
