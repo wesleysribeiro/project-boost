@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class PlayerBehavior : MonoBehaviour
 {
-    public float thrust = 1.0f;
+    public float thrust = 250.0f;
 
-    public float rotationSpeed = 0.8f;
+    public float rotationSpeed = 100f;
 
     Rigidbody rb;
 
@@ -44,10 +44,10 @@ public class PlayerBehavior : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.Space))
         {
-            rb.AddRelativeForce(thrust * Vector3.up);
+            rb.AddRelativeForce(thrust * Time.deltaTime * Vector3.up);
         }
 
         float rotation = Input.GetAxis("Horizontal");
-        transform.Rotate(0, 0, -rotationSpeed * rotation);
+        transform.Rotate(0, 0, -rotationSpeed * rotation * Time.deltaTime);
     }
 }
