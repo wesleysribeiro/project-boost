@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerBehavior : MonoBehaviour
 {
@@ -37,18 +38,25 @@ public class PlayerBehavior : MonoBehaviour
         if(otherObjectTag == "UntouchableWall")
         {
             losingSrc.Play();
-            Time.timeScale = 0;
-            Debug.Log("Game Over, hit wall that was not supposed to touch");
+            Debug.Log("Game Over, hit wall that was not supposed to touch");      
         }
         else if(otherObjectTag == "EndingArea")
         {
             winningSrc.Play();
             // TODO: Implement a way to win only when the player vehicle is completely inside ending area
-            Time.timeScale = 0;
             Debug.Log("You won!!! Congratulations you have reached the final of the map");
         }
+
+        // TODO: Somehow this does not prevent rotation
+        rb.constraints = RigidbodyConstraints.FreezeAll;
+        Invoke(nameof(reloadScene), 2f);
     }
 
+    void reloadScene()
+    {
+        Debug.Log("Reloading scene");
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
     void handleMovement()
     {   
         if(Input.GetKeyDown(KeyCode.Space))
@@ -68,5 +76,6 @@ public class PlayerBehavior : MonoBehaviour
 
         float rotation = Input.GetAxis("Horizontal");
         transform.Rotate(-rotationSpeed * rotation * Time.deltaTime * Vector3.forward);
+        Debug.Log("RigidBodyConstrains after rotation: " + rb.constraints);
     }
 }
