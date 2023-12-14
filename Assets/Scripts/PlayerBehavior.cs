@@ -47,8 +47,9 @@ public class PlayerBehavior : MonoBehaviour
             Debug.Log("You won!!! Congratulations you have reached the final of the map");
         }
 
-        // TODO: Somehow this does not prevent rotation
+        // TODO: Somehow this does not prevent rotation so we set rotation speed to 0 as a workaround
         rb.constraints = RigidbodyConstraints.FreezeAll;
+        rotationSpeed = 0;
         Invoke(nameof(reloadScene), 2f);
     }
 
