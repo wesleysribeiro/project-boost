@@ -29,36 +29,49 @@ public class PlayerBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       handleMovement();
+       HandleMovement();
     }
 
     private void OnCollisionEnter(Collision other) {
         var otherObjectTag = other.gameObject.tag;
 
+        // TODO: Somehow this does not prevent rotation so we set rotation speed to 0 as a workaround
+        rb.constraints = RigidbodyConstraints.FreezeAll;
+        rotationSpeed = 0;
+
         if(otherObjectTag == "UntouchableWall")
         {
             losingSrc.Play();
             Debug.Log("Game Over, hit wall that was not supposed to touch");      
+            Invoke(nameof(ReloadScene), 2f);
         }
         else if(otherObjectTag == "EndingArea")
         {
             winningSrc.Play();
             // TODO: Implement a way to win only when the player vehicle is completely inside ending area
             Debug.Log("You won!!! Congratulations you have reached the final of the map");
+            Invoke(nameof(LoadNextLevel), 2f);
         }
-
-        // TODO: Somehow this does not prevent rotation so we set rotation speed to 0 as a workaround
-        rb.constraints = RigidbodyConstraints.FreezeAll;
-        rotationSpeed = 0;
-        Invoke(nameof(reloadScene), 2f);
     }
 
-    void reloadScene()
+    void LoadNextLevel()
+    {
+        int sceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
+        
+        if(sceneIndex >= SceneManager.sceneCountInBuildSettings)
+        {
+            sceneIndex = 0;
+        }
+        
+        SceneManager.LoadScene(sceneIndex);
+    }
+
+    void ReloadScene()
     {
         Debug.Log("Reloading scene");
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
-    void handleMovement()
+    void HandleMovement()
     {   
         if(Input.GetKeyDown(KeyCode.Space))
         {
