@@ -35,9 +35,7 @@ public class PlayerBehavior : MonoBehaviour
     private void OnCollisionEnter(Collision other) {
         var otherObjectTag = other.gameObject.tag;
 
-        // TODO: Somehow this does not prevent rotation so we set rotation speed to 0 as a workaround
-        rb.constraints = RigidbodyConstraints.FreezeAll;
-        rotationSpeed = 0;
+        this.enabled = false;
 
         if(otherObjectTag == "UntouchableWall")
         {
