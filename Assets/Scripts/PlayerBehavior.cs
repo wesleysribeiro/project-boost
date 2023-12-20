@@ -10,20 +10,20 @@ public class PlayerBehavior : MonoBehaviour
     public float rotationSpeed = 100f;
 
     Rigidbody rb;
-    AudioSource boostSrc;
-    AudioSource losingSrc;
-    AudioSource winningSrc;
+    [SerializeField] AudioClip engine;
+    [SerializeField] AudioClip losing;
+    [SerializeField] AudioClip winning;
 
+    AudioSource soundSrc;
     ParticleSystem rocketFire;
 
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        boostSrc = GetComponentInChildren<AudioSource>();
-        losingSrc = GameObject.FindWithTag("LosingAudio").GetComponent<AudioSource>();
-        winningSrc = GameObject.FindWithTag("WinningAudio").GetComponent<AudioSource>();
         rocketFire = GetComponentInChildren<ParticleSystem>();
+        soundSrc = GetComponent<AudioSource>();
+        soundSrc.clip = engine;
     }
 
     // Update is called once per frame
@@ -35,17 +35,17 @@ public class PlayerBehavior : MonoBehaviour
     private void OnCollisionEnter(Collision other) {
         var otherObjectTag = other.gameObject.tag;
 
-        this.enabled = false;
+        // this.enabled = false;
 
         if(otherObjectTag == "UntouchableWall")
         {
-            losingSrc.Play();
+            soundSrc.PlayOneShot(losing);
             Debug.Log("Game Over, hit wall that was not supposed to touch");      
             Invoke(nameof(ReloadScene), 2f);
         }
         else if(otherObjectTag == "EndingArea")
         {
-            winningSrc.Play();
+            soundSrc.PlayOneShot(winning);
             // TODO: Implement a way to win only when the player vehicle is completely inside ending area
             Debug.Log("You won!!! Congratulations you have reached the final of the map");
             Invoke(nameof(LoadNextLevel), 2f);
@@ -74,7 +74,7 @@ public class PlayerBehavior : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Space))
         {
             rocketFire.Play();
-            boostSrc.PlayDelayed(0.2f);
+            soundSrc.Play();
         }
         if(Input.GetKeyUp(KeyCode.Space))
         {
@@ -88,6 +88,6 @@ public class PlayerBehavior : MonoBehaviour
 
         float rotation = Input.GetAxis("Horizontal");
         transform.Rotate(-rotationSpeed * rotation * Time.deltaTime * Vector3.forward);
-        Debug.Log("RigidBodyConstrains after rotation: " + rb.constraints);
+        // Debug.Log("RigidBodyConstrains after rotation: " + rb.constraints);
     }
 }
