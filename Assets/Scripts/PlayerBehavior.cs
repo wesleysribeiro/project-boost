@@ -36,7 +36,7 @@ public class PlayerBehavior : MonoBehaviour
        HandleMovement();
     }
 
-    void onWinningGame()
+    void OnWinningGame()
     {
         soundSrc.PlayOneShot(winning);
         winningEffect.Play();
@@ -44,7 +44,7 @@ public class PlayerBehavior : MonoBehaviour
         Invoke(nameof(LoadNextLevel), 2f);
     }
 
-    void onLosingGame()
+    void OnLosingGame()
     {
         soundSrc.PlayOneShot(losing);
         explosion.Play();
@@ -53,30 +53,29 @@ public class PlayerBehavior : MonoBehaviour
         Invoke(nameof(ReloadScene), 2f);
     }
 
-    private void OnCollisionEnter(Collision other) {
-
+    void OnCollisionEnter(Collision other) {
         if(isTransitioning)
             return;
 
         var otherObjectTag = other.gameObject.tag;
 
-        if(otherObjectTag == "UntouchableWall")
+        if(otherObjectTag == Tags.Wall)
         {
-            onLosingGame();
+            OnLosingGame();
         }
 
         isTransitioning = true;
     }
 
-    private void OnTriggerEnter(Collider other) {
+    void OnTriggerEnter(Collider other) {
         if(isTransitioning)
             return;
         
         var otherObjectTag = other.gameObject.tag;
 
-        if(otherObjectTag == "EndingArea")
+        if(otherObjectTag == Tags.EndingObject)
         {
-            onWinningGame();
+            OnWinningGame();
         }
 
         isTransitioning = true;
