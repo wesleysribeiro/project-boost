@@ -25,7 +25,6 @@ public class PlayerBehavior : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        rocketFire = GetComponentInChildren<ParticleSystem>();
         soundSrc = GetComponent<AudioSource>();
         soundSrc.clip = engine;
         isTransitioning = false;
@@ -37,6 +36,23 @@ public class PlayerBehavior : MonoBehaviour
        HandleMovement();
     }
 
+    void onWinningGame()
+    {
+        soundSrc.PlayOneShot(winning);
+        winningEffect.Play();
+        Debug.Log("You won!!! Congratulations you have reached the final of the map");
+        Invoke(nameof(LoadNextLevel), 2f);
+    }
+
+    void onLosingGame()
+    {
+        soundSrc.PlayOneShot(losing);
+        explosion.Play();
+        Debug.Log("Game Over, hit wall that was not supposed to touch");
+        rocketFire.Stop();
+        Invoke(nameof(ReloadScene), 2f);
+    }
+
     private void OnCollisionEnter(Collision other) {
 
         if(isTransitioning)
@@ -46,18 +62,21 @@ public class PlayerBehavior : MonoBehaviour
 
         if(otherObjectTag == "UntouchableWall")
         {
-            soundSrc.PlayOneShot(losing);
-            explosion.Play();
-            Debug.Log("Game Over, hit wall that was not supposed to touch");
-            Invoke(nameof(ReloadScene), 2f);
+            onLosingGame();
         }
-        else if(otherObjectTag == "EndingArea")
+
+        isTransitioning = true;
+    }
+
+    private void OnTriggerEnter(Collider other) {
+        if(isTransitioning)
+            return;
+        
+        var otherObjectTag = other.gameObject.tag;
+
+        if(otherObjectTag == "EndingArea")
         {
-            soundSrc.PlayOneShot(winning);
-            winningEffect.Play();
-            // TODO: Implement a way to win only when the player vehicle is completely inside ending area
-            Debug.Log("You won!!! Congratulations you have reached the final of the map");
-            Invoke(nameof(LoadNextLevel), 2f);
+            onWinningGame();
         }
 
         isTransitioning = true;
@@ -82,6 +101,9 @@ public class PlayerBehavior : MonoBehaviour
     }
     void HandleMovement()
     {   
+        if(isTransitioning)
+            return;
+
         if(Input.GetKeyDown(KeyCode.Space))
         {
             rocketFire.Play();

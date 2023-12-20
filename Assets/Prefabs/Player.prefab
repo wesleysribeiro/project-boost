@@ -57,7 +57,7 @@ MonoBehaviour:
   engine: {fileID: 8300000, guid: 976eaa5a0f0a16642b118ea82c7bf2b5, type: 3}
   losing: {fileID: 8300000, guid: 5fdb13d3756c84fecac96f5a2d124370, type: 3}
   winning: {fileID: 8300000, guid: 2667a0a008b044e218b63df62e2be749, type: 3}
-  rocketFire: {fileID: 0}
+  rocketFire: {fileID: 6249945392192680002}
   explosion: {fileID: 3588604348583333045}
   winningEffect: {fileID: 7564062889852418760}
 --- !u!54 &1808904523588695965
@@ -693,6 +693,11 @@ PrefabInstance:
 --- !u!4 &6083722723692386930 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4584431484625042, guid: 007c57e2df8e9b144b99f471b84f3d56, type: 3}
+  m_PrefabInstance: {fileID: 6088286230092151520}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &6249945392192680002 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 198637950067575458, guid: 007c57e2df8e9b144b99f471b84f3d56, type: 3}
   m_PrefabInstance: {fileID: 6088286230092151520}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7654253468404820438
