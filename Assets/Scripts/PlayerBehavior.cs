@@ -15,7 +15,9 @@ public class PlayerBehavior : MonoBehaviour
     [SerializeField] AudioClip winning;
 
     AudioSource soundSrc;
-    ParticleSystem rocketFire;
+    [SerializeField] ParticleSystem rocketFire;
+    [SerializeField] ParticleSystem explosion;
+    [SerializeField] ParticleSystem winningEffect;
 
     bool isTransitioning;
 
@@ -45,12 +47,14 @@ public class PlayerBehavior : MonoBehaviour
         if(otherObjectTag == "UntouchableWall")
         {
             soundSrc.PlayOneShot(losing);
-            Debug.Log("Game Over, hit wall that was not supposed to touch");      
+            explosion.Play();
+            Debug.Log("Game Over, hit wall that was not supposed to touch");
             Invoke(nameof(ReloadScene), 2f);
         }
         else if(otherObjectTag == "EndingArea")
         {
             soundSrc.PlayOneShot(winning);
+            winningEffect.Play();
             // TODO: Implement a way to win only when the player vehicle is completely inside ending area
             Debug.Log("You won!!! Congratulations you have reached the final of the map");
             Invoke(nameof(LoadNextLevel), 2f);
