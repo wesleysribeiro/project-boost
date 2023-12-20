@@ -17,6 +17,8 @@ public class PlayerBehavior : MonoBehaviour
     AudioSource soundSrc;
     ParticleSystem rocketFire;
 
+    bool isTransitioning;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -24,6 +26,7 @@ public class PlayerBehavior : MonoBehaviour
         rocketFire = GetComponentInChildren<ParticleSystem>();
         soundSrc = GetComponent<AudioSource>();
         soundSrc.clip = engine;
+        isTransitioning = false;
     }
 
     // Update is called once per frame
@@ -33,9 +36,11 @@ public class PlayerBehavior : MonoBehaviour
     }
 
     private void OnCollisionEnter(Collision other) {
-        var otherObjectTag = other.gameObject.tag;
 
-        // this.enabled = false;
+        if(isTransitioning)
+            return;
+
+        var otherObjectTag = other.gameObject.tag;
 
         if(otherObjectTag == "UntouchableWall")
         {
@@ -50,6 +55,8 @@ public class PlayerBehavior : MonoBehaviour
             Debug.Log("You won!!! Congratulations you have reached the final of the map");
             Invoke(nameof(LoadNextLevel), 2f);
         }
+
+        isTransitioning = true;
     }
 
     void LoadNextLevel()
