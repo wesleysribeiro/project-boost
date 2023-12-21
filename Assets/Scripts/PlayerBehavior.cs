@@ -20,6 +20,7 @@ public class PlayerBehavior : MonoBehaviour
     [SerializeField] ParticleSystem winningEffect;
 
     bool isTransitioning;
+    GameManager gameManager;
 
     // Start is called before the first frame update
     void Start()
@@ -28,12 +29,18 @@ public class PlayerBehavior : MonoBehaviour
         soundSrc = GetComponent<AudioSource>();
         soundSrc.clip = engine;
         isTransitioning = false;
+        gameManager = GameObject.FindWithTag(Tags.GameManager).GetComponent<GameManager>();
+        rb.useGravity = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-       HandleMovement();
+        if (gameManager.HasGameStarted())
+        {
+            rb.useGravity = true;
+        }
+        HandleMovement();
     }
 
     void OnWinningGame()
@@ -53,8 +60,13 @@ public class PlayerBehavior : MonoBehaviour
         Invoke(nameof(ReloadScene), 2f);
     }
 
+    bool CanMove()
+    {
+        return !isTransitioning && gameManager.HasGameStarted();
+    }
+
     void OnCollisionEnter(Collision other) {
-        if(isTransitioning)
+        if(!CanMove())
             return;
 
         var otherObjectTag = other.gameObject.tag;
@@ -68,7 +80,7 @@ public class PlayerBehavior : MonoBehaviour
     }
 
     void OnTriggerEnter(Collider other) {
-        if(isTransitioning)
+        if(!CanMove())
             return;
         
         var otherObjectTag = other.gameObject.tag;
@@ -100,7 +112,7 @@ public class PlayerBehavior : MonoBehaviour
     }
     void HandleMovement()
     {   
-        if(isTransitioning)
+        if(!CanMove())
             return;
 
         if(Input.GetKeyDown(KeyCode.Space))

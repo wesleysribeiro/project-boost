@@ -8,6 +8,7 @@ TagManager:
   - EndingArea
   - LosingAudio
   - WinningAudio
+  - GameManager
   layers:
   - Default
   - TransparentFX
